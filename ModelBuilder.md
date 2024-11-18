@@ -78,21 +78,24 @@
 | Recommendation	| Recommendation	| Recommend movies based on the preferences of similar users. |
 | Object detection	| Object detection (deep learning)	| Identify physical damage in an image. |
 
-Choosing a scenario for predictive maintenance
-Depending on what your data looks like, the predictive maintenance problem can be modeled through different tasks. For your use case, because the label is a binary value (0 or 1) that describes whether a machine is broken or not, the data classification scenario is appropriate.
+* Choosing a scenario for predictive maintenance
+  1. Depending on what your data looks like, the predictive maintenance problem can be modeled through different tasks.
+  2. For your use case, because the label is a binary value (0 or 1) that describes whether a machine is broken or not, the data classification scenario is appropriate.
 
-Choose your environment
-Now that you've selected the data classification, it's time to choose the environment where you want to train your machine learning model. Environments describe the compute resources that you'll use to train your machine learning model.
+* Choose your environment
+  1. Now that you've selected the data classification, it's time to choose the environment where you want to train your machine learning model.
+  2. Environments describe the compute resources that you'll use to train your machine learning model.
 
-Supported environments in Model Builder
-Model Builder supports the following environment options:
+* Supported environments in Model Builder
 
-Scenario	Local CPU	Local GPU	Azure GPU
-Data classification	✔️	❌	❌
-Value prediction	✔️	❌	❌
-Image classification	✔️	✔️	✔️
-Recommendation	✔️	❌	❌
-Object detection	❌	❌	✔️
+| Scenario	| Local CPU	| Local GPU	| Azure GPU |
+| -	| -| -	| - |
+| Data classification	| ✔️	| ❌	| ❌ |
+| Value prediction	| ✔️	| ❌	| ❌ |
+| Image classification	| ✔️	| ✔️	| ✔️ |
+| Recommendation	| ✔️	| ❌	| ❌ |
+| Object detection	| ❌	| ❌	| ✔️ |
+
 Depending on your use case, there are various reasons why you might choose a local or Azure environment.
 
 Local environments
