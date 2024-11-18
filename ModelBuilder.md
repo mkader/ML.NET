@@ -69,6 +69,7 @@
       1. Supported scenarios in Model Builder
 
 * Model Builder supports the following scenarios that map to machine learning tasks:
+
 |-|-|-|
 | Scenario | Machine learning task | Use case |
 |-|-|-|
