@@ -70,8 +70,8 @@
 
 * Model Builder supports the following scenarios that map to machine learning tasks:
 
-|-|-|-|
 | Scenario | Machine learning task | Use case |
+|-|-|-|
 | Data classification	| Binary and multiclass classification	| Organize articles by topic. |
 | Value prediction	| Linear regression	 |Predict the price of a home based on features of the home. |
 | Image classification	| Image classification (deep learning)	| Organize images by animal species based on the content of an image. |
