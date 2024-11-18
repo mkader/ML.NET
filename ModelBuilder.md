@@ -96,41 +96,38 @@
 | Recommendation	| ✔️	| ❌	| ❌ |
 | Object detection	| ❌	| ❌	| ✔️ |
 
-Depending on your use case, there are various reasons why you might choose a local or Azure environment.
+* Local environments - reasons to consider
+  1. Training locally doesn't cost you anything because you're using your computer's resources.
+  1. You don't want your data to leave your computer or datacenter.
 
-Local environments
-Reasons why you might consider local compute environments include:
+* Azure environments
+  1. Scenarios like image classification and object detection are resource intensive.
+  2. Using a GPU can often speed up the training process.
+  3. If you don't have a GPU or a computer with enough CPU or RAM, offloading the training process to Azure can lighten the load on your system.
 
-Training locally doesn't cost you anything because you're using your computer's resources.
-You don't want your data to leave your computer or datacenter.
-Azure environments
-Scenarios like image classification and object detection are resource intensive. Using a GPU can often speed up the training process. If you don't have a GPU or a computer with enough CPU or RAM, offloading the training process to Azure can lighten the load on your system.
+* Load and prepare your data
+  1. Data is the most important component for building machine learning models. The process for loading data into Model Builder consists of three steps:
+      1. Choose your data source type.
+      1. Provide the location of your data.
+      1. Choose column purpose.
+      1. Choose your data source type
 
-Load and prepare your data
-With your scenario and training environment selected, it's time to load and prepare your data.
+* Depending on your scenario, Model Builder supports loading data from the following sources:
+  1. Delimited files (comma, semicolon, and tab)
+  1. Local and remote SQL Server databases
+  1. Images (.jpg and .png)
+  1. Provide the location of your data
 
-Data is the most important component for building machine learning models. The process for loading data into Model Builder consists of three steps:
+* After you've selected your data source type, you have to provide the location where your dataset is stored. This location can be a directory, file path, or database connection string. It's dependent on the scenario and data source type that you've selected.
 
-Choose your data source type.
-Provide the location of your data.
-Choose column purpose.
-Choose your data source type
-Depending on your scenario, Model Builder supports loading data from the following sources:
+* When a data source is selected in Model Builder, it parses the data and makes its best effort to identify:
+  1. Headers and column names
+  1. Column separator
+  1. Column data types
+  1. Column purpose
+  1. Decimal separators
 
-Delimited files (comma, semicolon, and tab)
-Local and remote SQL Server databases
-Images (.jpg and .png)
-Provide the location of your data
-After you've selected your data source type, you have to provide the location where your dataset is stored. This location can be a directory, file path, or database connection string. It's dependent on the scenario and data source type that you've selected.
-
-When a data source is selected in Model Builder, it parses the data and makes its best effort to identify:
-
-Headers and column names
-Column separator
-Column data types
-Column purpose
-Decimal separators
-After the data is loaded, Model Builder displays a preview of some of the elements in your dataset.
+*After the data is loaded, Model Builder displays a preview of some of the elements in your dataset.
 
 Choose column purpose
 Depending on the scenario that you choose, you'll have to define the purpose of certain columns. In scenarios like data classification and value prediction, you'll have to choose which of your columns is the column that you want to predict (label).
