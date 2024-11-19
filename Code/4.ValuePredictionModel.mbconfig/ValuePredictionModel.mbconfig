@@ -3,7 +3,7 @@
   "DataSource": {
     "Type": "TabularFile",
     "Version": 1,
-    "FilePath": "C:\\Users\\mohideen.kader\\Downloads\\housing.csv",
+    "FilePath": "C:\\Users\\Downloads\\housing.csv",
     "Delimiter": ",",
     "DecimalMarker": ".",
     "HasHeader": true,
@@ -606,7 +606,7 @@
     },
     "Schema": "e0 * e1 * (e2 + e3 + e4 + e5 + e6)",
     "MetricName": "RSquared",
-    "ModelFilePath": "C:\\solera\\solera.poc\\src\\Solera.POC.ML\\ValuePredictionModel.mlnet"
+    "ModelFilePath": "C:\\POC.ML\\ValuePredictionModel.mlnet"
   },
   "Type": "TrainingConfig",
   "Version": 4,
