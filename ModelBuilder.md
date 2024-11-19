@@ -129,31 +129,29 @@
 
 *After the data is loaded, Model Builder displays a preview of some of the elements in your dataset.
 
-Choose column purpose
-Depending on the scenario that you choose, you'll have to define the purpose of certain columns. In scenarios like data classification and value prediction, you'll have to choose which of your columns is the column that you want to predict (label).
+* Choose column purpose
+  1. In scenarios like data classification and value prediction, you'll have to choose which of your columns is the column that you want to predict (label).
+  1. By default, all other columns that are not the label are used as features. Features are columns used as inputs to predict the label.
 
-By default, all other columns that are not the label are used as features. Features are columns used as inputs to predict the label.
+* Advanced data options
+  1. To customize how your data is loaded, Model Builder provides advanced data options. These options allow you to customize settings that pertain to your columns and dataset formatting.
+  1. For columns, you can choose the following settings:
+    1. Purpose: Should the column be a feature, be a label, or be ignored? You can have only one column selected as the label.
+    1. Data type: Is the value a single-precision float value, string, or Boolean?
+    1. Categorical: Does the column represent a categorical value (for example: low, medium, or high)?
+  1. To format data, you can choose whether the data contains column headers, the column separator (comma, semicolon, or tab), and the decimal separator type (period or comma).
 
-Advanced data options
-To customize how your data is loaded, Model Builder provides advanced data options. These options allow you to customize settings that pertain to your columns and dataset formatting.
+* Understanding the predictive maintenance dataset
+  1. The dataset used in this module is the AI4I 2020 Predictive Maintenance Dataset.
+  2. This synthetic dataset reflects real predictive maintenance data encountered in industry.
+  3. It consists of 10,000 data points and 14 columns. It's from:
+  1. Here's a preview of what the data looks like:
 
-For columns, you can choose the following settings:
+| UDI	| Product ID	| Type	| Air temperature [K]	| Process temperature [K]	| Rotational speed [rpm]	| Torque [Nm]	| Tool wear [min]	| Machine failure	| TWF	| HDF	| PWF	| OSF	| RNF | 
+|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
+| 1	| M14860	| M	| 298.1	| 308.6	| 1551	| 42.8	| 0	| 0	| 0| 	0	| 0	| 0	| 0 |
+| 162	| L47341	| L	| 298.3	| 308.1	| 1412	| 52.3	| 218	| 1	| 0	| 0	| 0	| 1	| 0 |
 
-Purpose: Should the column be a feature, be a label, or be ignored? You can have only one column selected as the label.
-Data type: Is the value a single-precision float value, string, or Boolean?
-Categorical: Does the column represent a categorical value (for example: low, medium, or high)?
-To format data, you can choose whether the data contains column headers, the column separator (comma, semicolon, or tab), and the decimal separator type (period or comma).
-
-Understanding the predictive maintenance dataset
-The dataset used in this module is the AI4I 2020 Predictive Maintenance Dataset. This synthetic dataset reflects real predictive maintenance data encountered in industry. It consists of 10,000 data points and 14 columns. It's from:
-
-Explainable Artificial Intelligence for Predictive Maintenance Applications, Stephan Matzka, Third International Conference on Artificial Intelligence for Industries (AI4I 2020), 2020 (in press), and hosted at the UCI Machine Learning Repository - Dua, D. and Graff, C. (2019). UCI Machine Learning Repository http://archive.ics.uci.edu/ml. Irvine, CA: University of California, School of Information and Computer Science.
-
-Here's a preview of what the data looks like:
-
-UDI	Product ID	Type	Air temperature [K]	Process temperature [K]	Rotational speed [rpm]	Torque [Nm]	Tool wear [min]	Machine failure	TWF	HDF	PWF	OSF	RNF
-1	M14860	M	298.1	308.6	1551	42.8	0	0	0	0	0	0	0
-162	L47341	L	298.3	308.1	1412	52.3	218	1	0	0	0	1	0
 The columns are defined as follows:
 
 UDI: The row's index.
