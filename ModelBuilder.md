@@ -8,29 +8,22 @@
 * ML.NET is an open-source, cross-platform ML framework for .NET. 
 
 * 2 Steps to build models by using Model Builder - 1.training and 2. consumption.
-* Training
-  1. Training is the process of applying algorithms to historical data to create a model that captures underlying patterns. Use the model to make predictions on new data.
-  1. Model Builder uses automated ML (AutoML) to find the best model for your data.
-      1. AutoML automates the process of applying ML to data.
-      1. Run an AutoML experiment on a dataset to iterate over different data transformations, ML algorithms, and settings, and then select the best model.
-  1. The model training process consists of the following steps:
-      1. Choose a scenario: What problem are you trying to solve? The scenario that you choose depends on your data and what you're trying to predict.
-      1. Choose an environment: Where do you want to train your model? Depending on available compute resources, cost, privacy requirements, and other factors, you might choose to train models locally on your computer or in the cloud.
-      1. Load your data: Load the dataset to use for training. Define the columns that you want to predict, and then choose the columns that you want to use as inputs for your prediction.
-      1. Train your model: Let AutoML choose the best algorithm for your dataset based on the scenario you've chosen.
-      1. Evaluate your model: Use metrics to evaluate how well your model performs and makes predictions on new data.
+  1. Training
+      1. Training is the process of applying algorithms to historical data to create a model that captures underlying patterns. Use the model to make predictions on new data.
+      1. Model Builder uses automated ML (AutoML) to find the best model for your data.
+          1. AutoML automates the process of applying ML to data.
+          1. Run an AutoML experiment on a dataset to iterate over different data transformations, ML algorithms, and settings, and then select the best model.
+      1. The model training process consists of the following steps:
+          1. Choose a scenario: Problem trying to solve? Choose depends on your data and trying to predict.
+          1. Choose an environment: Train your model locally or cloud? Depending on available compute resources, cost, privacy requirements, and other factors
+          2. Load your data: Use for training. Define the columns to predict and then choose the columns to use as inputs for prediction.
+          1. Train your model: Let AutoML choose the best algorithm for your dataset based on the scenario you've chosen.
+          1. Evaluate your model: Use metrics to evaluate how well your model performs and makes predictions on new data.
 
-* Consumption
-  1. Consumption is the process of using a trained ML model to make predictions on new and previously unseen data.
-  2. With Model Builder, you can consume ML models from new and existing .NET projects.
+  1. Consumption - is the process of using a trained ML model to make predictions on new and previously unseen data.
 
-* ML.NET-based ML models are serialized and saved to a file. The model file can then be loaded into any .NET application and used to make predictions through ML.NET APIs. These application types include:
-  1. ASP.NET Core Web API
-  1. Azure Functions
-  1. Blazor
-  1. Windows Presentation Foundation (WPF) or Windows Forms (WinForms)
-  1. Console
-  1. Class library
+* ML.NET-based ML models are serialized and saved to a file. It can then be loaded into any .NET application and used to make predictions through ML.NET APIs.
+  1. .NET Applications: ASP.NET Core Web API, Azure Functions, Blazor,  Windows Presentation Foundation (WPF) or Windows Forms (WinForms), Console, Class library
 
 ## Choose your scenario and prepare data
 
@@ -53,8 +46,8 @@
 * The scenarios map to ML tasks. A ML task is the type of prediction or inference being made, based on the problem or question that's being asked and the available data.
 
 * 2 categories ML tasks: 1.Supervised, 2.Unsupervised
-  1. For supervised tasks, the label is known. Examples of supervised ML tasks include: Classification, Binary (two categories), Multiclass (two or more categories), Image, Regression
-  1. For unsupervised tasks, the label is unknown. Examples of unsupervised ML tasks include: Clustering, Anomaly detection, Supported scenarios in Model Builder
+  1. For supervised ML tasks, the label is known. Examples: Classification, Binary (two categories), Multiclass (two or more categories), Image, Regression
+  1. For unsupervised ML tasks, the label is unknown. Examples: Clustering, Anomaly detection, Supported scenarios in Model Builder
 
 * Model Builder supports the following scenarios that map to machine learning tasks:
 
@@ -70,9 +63,7 @@
 * <img src="https://github.com/user-attachments/assets/cedf7b17-2fdb-4a85-9b3f-48850a2eb0df">
 
 
-### STEP 2: Choose your environment 
-* To train ML model.
-* Supported environments in Model Builder
+### STEP 2: Choose your environment - To train ML model. Supported environments in Model Builder
 
 | Scenario	| Local CPU	| Local GPU	| Azure GPU |
 | -	| -| -	| - |
@@ -94,13 +85,11 @@
  * ![image](https://github.com/user-attachments/assets/a9105aa7-a125-496a-95b0-23fde5c6a215)
 
 ### STEP 3: Load and prepare your data
-* Data is the most important component for building ML models. The process for loading data into Model Builder consists of three steps:
+* The process for loading data into Model Builder consists of three steps:
   1. Choose your data source type. 2. Provide the location of your data. 3. Choose column purpose.
 
 * Choose your data source type, Model Builder supports loading data from the following sources:
-  1. Delimited files (comma, semicolon, and tab), 2. Local and remote SQL Server dbs, 3. Images (.jpg and .png), 4. Provide the location of your data
-
-* After selected data source type, provide the location (a directory, file path, or db connection string) where your dataset is stored.
+  1. Delimited files (,, ;, and tab), 2. SQL Server dbs, 3. Images, 4. Provide the location (a directory, file path, or db connection string) where your dataset is stored.
   
 * When a data source is selected in Model Builder, it parses the data and makes its best effort to identify:
   1. Headers and column names, 2. Column separator, 3. Column data types, 4. Column purpose, 5. Decimal separators
@@ -113,13 +102,12 @@
 
 * ![image](https://github.com/user-attachments/assets/b218a09e-5181-4cd7-927b-f8adc98d5e98)
 
-* Advanced data options
-  1. To customize how your data is loaded. These options allow you to customize settings that pertain to your columns and dataset formatting.
-  1. For columns, you can choose the following settings:
+* Advanced data options - To customize how your data is loaded. Customize settings
+  1. For columns, choose the following settings:
     1. Purpose: Should the column be a feature, be a label, or be ignored? You can have only one column selected as the label.
     1. Data type: Is the value a single-precision float value, string, or Boolean?
     1. Categorical: Does the column represent a categorical value (for example: low, medium, or high)?
-  1. To format data, you can choose whether the data contains column headers, the column separator (comma, semicolon, or tab), and the decimal separator type (period or comma).
+  1. To format data, choose whether the data contains column headers, the column separator (,, ;, or tab), and the decimal separator type (period or comma).
   2. ![image](https://github.com/user-attachments/assets/7b0e11e3-35fe-446e-a0e0-c048dd08c7c5)
   3. ![image](https://github.com/user-attachments/assets/cd210c3a-9fb6-4a4b-b237-168529fc88ca)
   4. ![image](https://github.com/user-attachments/assets/abd7f24d-2f88-4138-b254-77aaa4188949)
