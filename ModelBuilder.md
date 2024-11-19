@@ -39,8 +39,8 @@
     1. Provide a name for your model.
     1. Collaborate with others on your team via source control.
     1. Persist state. If at any point in the training process you need to close Model Builder, your state is saved and you can pick up where you left off.
-* ![image](https://github.com/user-attachments/assets/d2f148e3-61cc-44f3-8bc7-1409c8ab22c7)
-* ![image](https://github.com/user-attachments/assets/7e706b97-3d50-4652-9c20-e5f13a835a54)
+* <img src="https://github.com/user-attachments/assets/d2f148e3-61cc-44f3-8bc7-1409c8ab22c7" height=250 width=250>
+* <img src="https://github.com/user-attachments/assets/7e706b97-3d50-4652-9c20-e5f13a835a54" height=250 width=250>
     
 ### STEP 1: Choose a scenario
 * What is a scenario? - A scenario describes the problem you're trying to solve by using your data. Common scenarios:
@@ -66,8 +66,8 @@
 | Recommendation	| Recommendation	| Recommend movies based on the preferences of similar users. |
 | Object detection	| Object detection (deep learning)	| Identify physical damage in an image. |
 
-* ![image](https://github.com/user-attachments/assets/1653a8e2-5269-4445-bd53-3a6eb52e8a32)
-* ![image](https://github.com/user-attachments/assets/cedf7b17-2fdb-4a85-9b3f-48850a2eb0df)
+* <img src="https://github.com/user-attachments/assets/1653a8e2-5269-4445-bd53-3a6eb52e8a32" height=250 width=250>
+* <img src="https://github.com/user-attachments/assets/cedf7b17-2fdb-4a85-9b3f-48850a2eb0df" height=250 width=250>
 
 
 
