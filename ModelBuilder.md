@@ -105,7 +105,7 @@
 * When a data source is selected in Model Builder, it parses the data and makes its best effort to identify:
   1. Headers and column names, 2. Column separator, 3. Column data types, 4. Column purpose, 5. Decimal separators
 
-*After the data is loaded, Model Builder displays a preview of some of the elements in your dataset.
+* After the data is loaded, Model Builder displays a preview of some of the elements in your dataset.
 
 * Choose column purpose
   1. In scenarios like data classification and value prediction, choose which of columns is the column that you want to predict (label).
@@ -113,113 +113,13 @@
 
 * ![image](https://github.com/user-attachments/assets/b218a09e-5181-4cd7-927b-f8adc98d5e98)
 
-
 * Advanced data options
-  1. To customize how your data is loaded, Model Builder provides advanced data options. These options allow you to customize settings that pertain to your columns and dataset formatting.
+  1. To customize how your data is loaded. These options allow you to customize settings that pertain to your columns and dataset formatting.
   1. For columns, you can choose the following settings:
     1. Purpose: Should the column be a feature, be a label, or be ignored? You can have only one column selected as the label.
     1. Data type: Is the value a single-precision float value, string, or Boolean?
     1. Categorical: Does the column represent a categorical value (for example: low, medium, or high)?
   1. To format data, you can choose whether the data contains column headers, the column separator (comma, semicolon, or tab), and the decimal separator type (period or comma).
-
-* Understanding the predictive maintenance dataset
-  1. The dataset used in this module is the AI4I 2020 Predictive Maintenance Dataset.
-  2. This synthetic dataset reflects real predictive maintenance data encountered in industry.
-  3. It consists of 10,000 data points and 14 columns. It's from:
-  1. Here's a preview of what the data looks like:
-
-| UDI	| Product ID	| Type	| Air temperature [K]	| Process temperature [K]	| Rotational speed [rpm]	| Torque [Nm]	| Tool wear [min]	| Machine failure	| TWF	| HDF	| PWF	| OSF	| RNF | 
-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|
-| 1	| M14860	| M	| 298.1	| 308.6	| 1551	| 42.8	| 0	| 0	| 0| 	0	| 0	| 0	| 0 |
-| 162	| L47341	| L	| 298.3	| 308.1	| 1412	| 52.3	| 218	| 1	| 0	| 0	| 0	| 1	| 0 |
-
-  1. The columns are defined as follows:
-      1. UDI: The row's index.
-      1. Product ID: A product identifier that contains a product type category and a variant-specific serial number.
-      1. Type: Product quality category. The values are L (low; 50% of all products), M (medium; 30%), or H (high; 20%).
-      1. Air temperature [K], Process temperature [K], Rotational speed [rpm], Torque [Nm], Tool wear [min]: Values collected from sensors.
-      1. Machine failure: Binary label (0 or 1) that indicates whether the machine has failed.
-      1. TWF, HDF, PWF, OSF, RNF: Independent machine failure modes. A value of 1 indicates that the respective failure mode occurred.
-  1. For this scenario, you won't use all of the columns in the dataset because they either don't inform the prediction or contain redundant information.
-
-* Because you want to be able to predict whether a machine will fail or not, the Machine failure column is the label.
-* In Model Builder, for features, you can use data from the Product ID, Type, and various sensor columns.
-
-* Although the failure modes are useful in diagnosing the root cause of a failure, they aren't useful for your use case.
-* The reason is that you only want to know whether a machine has failed or not. Additionally, similar information is already captured by the Machine failure column. So, you can ignore these columns.
-
-
-
-
-
-
-
-
-
-
-Load and prepare your data
-With your scenario and training environment selected, it's time to load and prepare your data.
-
-Data is the most important component for building machine learning models. The process for loading data into Model Builder consists of three steps:
-
-Choose your data source type.
-Provide the location of your data.
-Choose column purpose.
-Choose your data source type
-Depending on your scenario, Model Builder supports loading data from the following sources:
-
-Delimited files (comma, semicolon, and tab)
-Local and remote SQL Server databases
-Images (.jpg and .png)
-Provide the location of your data
-After you've selected your data source type, you have to provide the location where your dataset is stored. This location can be a directory, file path, or database connection string. It's dependent on the scenario and data source type that you've selected.
-
-When a data source is selected in Model Builder, it parses the data and makes its best effort to identify:
-
-Headers and column names
-Column separator
-Column data types
-Column purpose
-Decimal separators
-After the data is loaded, Model Builder displays a preview of some of the elements in your dataset.
-
-Choose column purpose
-Depending on the scenario that you choose, you'll have to define the purpose of certain columns. In scenarios like data classification and value prediction, you'll have to choose which of your columns is the column that you want to predict (label).
-
-By default, all other columns that are not the label are used as features. Features are columns used as inputs to predict the label.
-
-Advanced data options
-To customize how your data is loaded, Model Builder provides advanced data options. These options allow you to customize settings that pertain to your columns and dataset formatting.
-
-For columns, you can choose the following settings:
-
-Purpose: Should the column be a feature, be a label, or be ignored? You can have only one column selected as the label.
-Data type: Is the value a single-precision float value, string, or Boolean?
-Categorical: Does the column represent a categorical value (for example: low, medium, or high)?
-To format data, you can choose whether the data contains column headers, the column separator (comma, semicolon, or tab), and the decimal separator type (period or comma).
-
-Understanding the predictive maintenance dataset
-The dataset used in this module is the AI4I 2020 Predictive Maintenance Dataset. This synthetic dataset reflects real predictive maintenance data encountered in industry. It consists of 10,000 data points and 14 columns. It's from:
-
-Explainable Artificial Intelligence for Predictive Maintenance Applications, Stephan Matzka, Third International Conference on Artificial Intelligence for Industries (AI4I 2020), 2020 (in press), and hosted at the UCI Machine Learning Repository - Dua, D. and Graff, C. (2019). UCI Machine Learning Repository http://archive.ics.uci.edu/ml. Irvine, CA: University of California, School of Information and Computer Science.
-
-Here's a preview of what the data looks like:
-
-UDI	Product ID	Type	Air temperature [K]	Process temperature [K]	Rotational speed [rpm]	Torque [Nm]	Tool wear [min]	Machine failure	TWF	HDF	PWF	OSF	RNF
-1	M14860	M	298.1	308.6	1551	42.8	0	0	0	0	0	0	0
-162	L47341	L	298.3	308.1	1412	52.3	218	1	0	0	0	1	0
-The columns are defined as follows:
-
-UDI: The row's index.
-Product ID: A product identifier that contains a product type category and a variant-specific serial number.
-Type: Product quality category. The values are L (low; 50% of all products), M (medium; 30%), or H (high; 20%).
-Air temperature [K], Process temperature [K], Rotational speed [rpm], Torque [Nm], Tool wear [min]: Values collected from sensors.
-Machine failure: Binary label (0 or 1) that indicates whether the machine has failed.
-TWF, HDF, PWF, OSF, RNF: Independent machine failure modes. A value of 1 indicates that the respective failure mode occurred.
-For this scenario, you won't use all of the columns in the dataset because they either don't inform the prediction or contain redundant information.
-
-Because you want to be able to predict whether a machine will fail or not, the Machine failure column is the label. In Model Builder, for features, you can use data from the Product ID, Type, and various sensor columns.
-
-Although the failure modes are useful in diagnosing the root cause of a failure, they aren't useful for your use case. The reason is that you only want to know whether a machine has failed or not. Additionally, similar information is already captured by the Machine failure column. So, you can ignore these columns.
-
-Proceed to the next unit to check your knowledge on scenarios, environments, and data preparation.
+  2. ![image](https://github.com/user-attachments/assets/7b0e11e3-35fe-446e-a0e0-c048dd08c7c5)
+  3. ![image](https://github.com/user-attachments/assets/cd210c3a-9fb6-4a4b-b237-168529fc88ca)
+  4. ![image](https://github.com/user-attachments/assets/abd7f24d-2f88-4138-b254-77aaa4188949)
