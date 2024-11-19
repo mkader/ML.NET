@@ -3,7 +3,7 @@
 ## What is Model Builder?
 * ML is a technique that uses mathematics and statistics to identify patterns in data without being explicitly programmed.
 * Model Builder is a graphical VS extension to train and deploy custom ML models by using ML.NET.
-* <img src="https://github.com/user-attachments/assets/d0cf6340-785a-4144-8d2b-a2efce5919af" height=500 width=500>
+* <img src="https://github.com/user-attachments/assets/d0cf6340-785a-4144-8d2b-a2efce5919af" height=750 width=750>
 
 * ML.NET is an open-source, cross-platform ML framework for .NET. 
 
@@ -40,7 +40,7 @@
     1. Collaborate with others on your team via source control.
     1. Persist state. If at any point in the training process you need to close Model Builder, your state is saved and you can pick up where you left off.
 
-|<img src="https://github.com/user-attachments/assets/d2f148e3-61cc-44f3-8bc7-1409c8ab22c7" height=500 width=500>|<img src="https://github.com/user-attachments/assets/7e706b97-3d50-4652-9c20-e5f13a835a54" height=500 width=500>|
+|<img src="https://github.com/user-attachments/assets/d2f148e3-61cc-44f3-8bc7-1409c8ab22c7" height=750 width=750>|<img src="https://github.com/user-attachments/assets/7e706b97-3d50-4652-9c20-e5f13a835a54" height=750 width=750>|
     
 ### STEP 1: Choose a scenario
 * What is a scenario? - A scenario describes the problem you're trying to solve by using your data. Common scenarios:
@@ -66,8 +66,8 @@
 | Recommendation	| Recommendation	| Recommend movies based on the preferences of similar users. |
 | Object detection	| Object detection (deep learning)	| Identify physical damage in an image. |
 
-* <img src="https://github.com/user-attachments/assets/1653a8e2-5269-4445-bd53-3a6eb52e8a32" height=500 width=500>
-* <img src="https://github.com/user-attachments/assets/cedf7b17-2fdb-4a85-9b3f-48850a2eb0df" height=500 width=500>
+* <img src="https://github.com/user-attachments/assets/1653a8e2-5269-4445-bd53-3a6eb52e8a32" height=750 width=750>
+* <img src="https://github.com/user-attachments/assets/cedf7b17-2fdb-4a85-9b3f-48850a2eb0df" height=750 width=750>
 
 
 
