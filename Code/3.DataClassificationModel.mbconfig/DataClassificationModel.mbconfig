@@ -3,7 +3,7 @@
   "DataSource": {
     "Type": "TabularFile",
     "Version": 1,
-    "FilePath": "C:\\Users\\mohideen.kader\\Downloads\\spam_assassin_tiny.csv",
+    "FilePath": "C:\\Users\\Downloads\\spam_assassin_tiny.csv",
     "Delimiter": ",",
     "DecimalMarker": ".",
     "HasHeader": true,
@@ -133,7 +133,7 @@
     },
     "Schema": "e0 * e1 * e2 * (e3 + e4 + e5 + e6 + e7 + e8 + e9) * e10",
     "MetricName": "MacroAccuracy",
-    "ModelFilePath": "C:\\solera\\solera.poc\\src\\Solera.POC.ML\\POCModel.mlnet"
+    "ModelFilePath": "C:\\POC.ML\\POCModel.mlnet"
   },
   "Type": "TrainingConfig",
   "Version": 4,
