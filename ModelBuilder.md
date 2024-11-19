@@ -3,7 +3,7 @@
 ## What is Model Builder?
 * ML is a technique that uses mathematics and statistics to identify patterns in data without being explicitly programmed.
 * Model Builder is a graphical VS extension to train and deploy custom ML models by using ML.NET.
-* ![image](https://github.com/user-attachments/assets/d0cf6340-785a-4144-8d2b-a2efce5919af)
+* <img src="https://github.com/user-attachments/assets/d0cf6340-785a-4144-8d2b-a2efce5919af" height=250 width=250>
 
 * ML.NET is an open-source, cross-platform ML framework for .NET. 
 
@@ -65,6 +65,11 @@
 | Image classification	| Image classification (deep learning)	| Organize images by animal species based on the content of an image. |
 | Recommendation	| Recommendation	| Recommend movies based on the preferences of similar users. |
 | Object detection	| Object detection (deep learning)	| Identify physical damage in an image. |
+
+* ![image](https://github.com/user-attachments/assets/1653a8e2-5269-4445-bd53-3a6eb52e8a32)
+* ![image](https://github.com/user-attachments/assets/cedf7b17-2fdb-4a85-9b3f-48850a2eb0df)
+
+
 
 * Choose your environment
   1. Now that you've selected the data classification, it's time to choose the environment where you want to train your machine learning model.
