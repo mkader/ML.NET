@@ -137,41 +137,147 @@
 * Use more than 100 rows as datasets. Fewer than that might not produce any results.
 
 * How does Model Builder find the best model?
-  1. Model Builder uses automated ML (AutoML) to identify the set of transformations to prepare your data for training, select an algorithm, and tune the settings (also known as hyperparameters) of the algorithm. By using evaluation metrics that are specific to the selected machine learning task, Model Builder can determine which model performs best for your data.
+  1. Model Builder uses automated ML (AutoML) to identify the set of transformations to prepare your data for training, select an algorithm, and tune the settings (also known as hyperparameters) of the algorithm.
+  2. By using evaluation metrics that are specific to the selected ML task, Model Builder can determine which model performs best for your data.
 
-Training and consumption code
-After your model is done training, Model Builder generates the following files and adds them to your project. These files are nested under your .mbconfig file.
+* Training and consumption code
+  1. After your model is done training, Model Builder generates the following files and adds them to your project. These files are nested under your .mbconfig file.
+    1. <MODEL-NAME>.mlnet: The artifact for the ML model. This file contains a serialized version of your model. You can unzip the file. 
+    1. <MODEL-NAME>.training.cs: - contains the model training pipeline.
+        1. model training pipeline consists of the data transformations and algorithm that are used to train your ML model.
+        2. For more information, see <a href="https://learn.microsoft.com/en-us/dotnet/machine-learning/resources/transforms">Data transforms</> and <a href="https://learn.microsoft.com/en-us/dotnet/machine-learning/how-to-choose-an-ml-net-algorithm">How to choose an ML.NET algorithm</a>.
+    1. <MODEL-NAME>.consumption.cs: - contains the classes that define the schema of your model input and output.
+        1. It also contains the Predict method, which uses your model to create a PredictionEngine API and make predictions.
+        2. PredictionEngine is a convenience API that allows you to perform a prediction on a single instance of data.
 
-<MODEL-NAME>.zip: The artifact for the machine learning model. This file contains a serialized version of your model.
-<MODEL-NAME>.training.cs: This file contains the model training pipeline. Your model training pipeline consists of the data transformations and algorithm that are used to train your machine learning model. For more information, see Data transforms and How to choose an ML.NET algorithm.
-<MODEL-NAME>.consumption.cs: This file contains the classes that define the schema of your model input and output. It also contains the Predict method, which uses your model to create a PredictionEngine API and make predictions. PredictionEngine is a convenience API that allows you to perform a prediction on a single instance of data.
-Evaluate your model
-Now that you've found the best model for your data, it's time to test how well it makes predictions. One way to evaluate how well your model performs is by using metrics.
+* ![image](https://github.com/user-attachments/assets/3b046489-aa1d-4cbd-84ef-4045d9fa1a84)
+* ![image](https://github.com/user-attachments/assets/4dc46309-dd71-4541-bc04-3ee89e1a6869)
 
-Evaluation metrics are specific to the type of machine learning task that a model performs. For each task, you can look at various metrics to determine the performance of your model.
+```csharp
+start multiclass classification
+Evaluate Metric: MacroAccuracy
+Available Trainers: LGBM,FASTFOREST,FASTTREE,LBFGS,SDCA
+Training time in second: 60
+|      Trainer                             MacroAccuracy Duration    |
+|--------------------------------------------------------------------|
+|0     FastTreeOva                         0.6643     2.9640         |
+|1     FastForestOva                       0.7180     2.9970         |
+|2     FastTreeOva                         0.7485     2.4340         |
+|3     LightGbmMulti                       0.6823     2.0310         |
+|4     SdcaMaximumEntropyMulti             0.5000     1.3820         |
+|5     FastTreeOva                         0.7376     3.2370         |
+|6     FastTreeOva                         0.7031     2.2470         |
+|7     LbfgsMaximumEntropyMulti            0.7076     1.3540         |
+|8     FastForestOva                       0.7467     5.9190         |
+[Source=AutoMLExperiment, Kind=Info] cancel training because cancellation token is invoked...
+|--------------------------------------------------------------------|
+|                          Experiment Results                        |
+|--------------------------------------------------------------------|
+|                               Summary                              |
+|--------------------------------------------------------------------|
+|ML Task: multiclass classification                                  |
+|Dataset: C:\sentiment labelled sentences\yelp_labelled.txt|
+|Label : col1                                                        |
+|Total experiment time :    59.0000 Secs                             |
+|Total number of models explored: 10                                 |
+|--------------------------------------------------------------------|
+|                        Top 5 models explored                       |
+|--------------------------------------------------------------------|
+|      Trainer                             MacroAccuracy Duration    |
+|--------------------------------------------------------------------|
+|2     FastTreeOva                         0.7485     2.4340         |
+|8     FastForestOva                       0.7467     5.9190         |
+|5     FastTreeOva                         0.7376     3.2370         |
+|1     FastForestOva                       0.7180     2.9970         |
+|7     LbfgsMaximumEntropyMulti            0.7076     1.3540         |
+|--------------------------------------------------------------------|
+Generate code behind files
 
-This table shows the evaluation metrics that Model Builder uses to choose the best model, based on scenario:
 
-Scenario	Evaluation metrics	Look for
-Data classification	Binary (Accuracy) / Multiclass (MicroAccuracy)	The closer to 1.00, the better
-Value prediction	R-Squared	The closer to 1.00, the better
-Image classification	Accuracy	The closer to 1.00, the better
-Recommendation	R-Squared	The closer to 1.00, the better
-Object detection	Accuracy	The closer to 1.00, the better
-For more information on ML.NET evaluation metrics, see Model evaluation metrics.
+Copying generated code to project...
+Copying RestaurantReviewModel.consumption.cs to folder: C:\src\POC.ML
+Copying RestaurantReviewModel.training.cs to folder: C:\src\POC.ML
+Copying RestaurantReviewModel.evaluate.cs to folder: C:\src\POC.ML
+COMPLETED
 
-Choosing the model with the highest metrics
-Your model has achieved perfect evaluation metrics. Does that mean that you have the perfect model? Not exactly. In fact, if you end up with a "perfect" model as specified by your evaluation metrics, you should be skeptical.
+Updating nuget dependencies...
+Starting update NuGet dependencies async.
+Project Miscellaneous Files cannot be accessed. It may be unloaded.
+Installing nuget package, package ID: Microsoft.ML, package Version: 2.0.0
+Installing nuget package, package ID: Microsoft.ML.FastTree, package Version: 2.0.0
+COMPLETED
+```
 
-In machine learning, there's a concept called overfitting, and it's something you should watch out for. Overfitting is when your model learns the patterns in your training dataset too well. When you try to use the model with new data, it doesn't provide accurate results.
+### STEP 5: Evaluate your model
+* Test your model. Evaluate by using metrics.
+* Evaluation metrics are specific to the type of ML task that a model performs.
+* For each task, you can look at various metrics to determine the performance of your model.
+* This table shows the evaluation metrics that Model Builder uses to choose the best model, based on scenario:
 
-Here's a scenario to help illustrate overfitting. Imagine you're studying for an exam. Somehow you have the questions to the exam and the answers ahead of time. As you study for the exam, you focus on memorizing the answers to the questions. When you take the exam and receive the results, you get a high grade. A high grade might signal that you know the subject matter well. However, if someone were to ask you a question on one of the subjects that was not directly on the test, you might get it wrong because you haven't learned the subject, you just memorized the answers. Overfitting works in a similar way.
+| Scenario	| Evaluation metrics	| Look for | 
+|-|-|-| 
+| Data classification	| Binary (Accuracy) / Multiclass (MicroAccuracy)	| The closer to 1.00, the better | 
+| Value prediction	| R-Squared	| The closer to 1.00, the better | 
+| Image classification	| Accuracy	| The closer to 1.00, the better | 
+| Recommendation	| R-Squared	| The closer to 1.00, the better | 
+| Object detection	| Accuracy	| The closer to 1.00, the better | 
 
-Improving your model
-If you're not satisfied with the evaluation metrics of your model, you can try these things to improve your model:
+* <a href="https://learn.microsoft.com/en-us/dotnet/machine-learning/resources/metrics">see Model evaluation metrics.</a>
 
-Provide more representative data observations: Experience is the best teacher. The concept also applies to machine learning. The more data observations you can provide, the broader the set of patterns that your model can recognize.
-Provide more context: Adding columns that add context to your data helps your model identify patterns. For example, let's say you're trying to predict the price of a home and the only data point you have is number of rooms. That by itself might not tell you much. However, what if you knew that the home is located in a suburban neighborhood outside a major metropolitan area, where average household income is $80,000 and schools are in the top 20th percentile? Now you have more information that can help inform the model's decision.
-Use meaningful data and features: Although more data samples and features can help improve the accuracy of the model, they can also introduce noise because not all data and features are meaningful. It's important to understand which features most heavily affect the algorithm's decisions.
-Explore more algorithms: Providing Model Builder with more time to allow it to explore more algorithms and hyperparameters might help improve your model.
-In the next unit, you'll use Model Builder to train a machine learning model.
+* Choosing the model with the highest metrics
+  1. Your model has achieved perfect evaluation metrics. Does that mean that you have the perfect model? Not exactly.
+      1. In fact, if you end up with a "perfect" model as specified by your evaluation metrics, you should be skeptical.
+
+  1. In ML, there's a concept called overfitting, and it's something you should watch out for.
+      1. Overfitting is when your model learns the patterns in your training dataset too well. When you try to use the model with new data, it doesn't provide accurate results.
+
+      1. Overfitting scenario - Imagine you're studying for an exam. Somehow you have the questions to the exam and the answers ahead of time.
+          1. As you study for the exam, you focus on memorizing the answers to the questions.
+          2. When you take the exam and receive the results, you get a high grade.
+          3. A high grade might signal that you know the subject matter well.
+          4. However, if someone were to ask you a question on one of the subjects that was not directly on the test, you might get it wrong because you haven't learned the subject, you just memorized the answers. Overfitting works in a similar way.
+
+* ![image](https://github.com/user-attachments/assets/747b2ca6-2749-4852-a3e8-ea9b39ee32f0)
+
+* Improving your model
+  1. Provide more representative data observations:
+      1. Experience is the best teacher.
+      2. The concept also applies to ML.
+      3. The more data observations you can provide, the broader the set of patterns that your model can recognize.
+  1. Provide more context:
+      1. Adding columns that add context to your data helps your model identify patterns.
+          1. For example, let's say you're trying to predict the price of a home and the only data point you have is number of rooms.
+          2. That by itself might not tell you much.
+          3. However, what if you knew that the home is located in a suburban neighborhood outside a major metropolitan area,
+          4. where average household income is $80,000 and schools are in the top 20th percentile?
+          5. Now you have more information that can help inform the model's decision.
+  1. Use meaningful data and features:
+      1. Although more data samples and features can help improve the accuracy of the model,
+      2. they can also introduce noise because not all data and features are meaningful.
+      3. It's important to understand which features most heavily affect the algorithm's decisions.
+  1. Explore more algorithms:
+      1. Providing Model Builder with more time to allow it to explore more algorithms and hyperparameters might help improve your model.
+    
+### STEP 6: Consume ML models
+* After you train a ML model, consume it so that you can make predictions.
+* Code snippet - Add a code snippet in your application.
+  1. The code snippet creates an instance of your model input.
+  2. It then calls the Predict method in the .consumption.cs file to make predictions by using the input data that you've provided.
+
+* Project templates - Model Builder provides the following templates to autogenerate new .NET applications to consume your model.
+  1. Console application - template is a C# .NET application that uses your model to make predictions. It contains the following files:
+      1. Program.cs - Similar to the code snippet.
+      1. <MODEL-NAME>.mbconfig - The .mbconfig file for your model and generated training and consumption code.
+  
+  2. Web API - template is an ASP.NET Core project built via the ASP.NET Minimal API application model to simplify hosting your model as a web service.
+      1. Web APIs give you the flexibility of making predictions with your model over HTTP web requests from various clients, like desktop, web, and mobile applications.
+      1. The Web API template contains the following files:
+          1. Program.cs - Your application configures the PredictionEnginePool service by using dependency injection, defines a single /predict endpoint, and starts your application to listen for incoming HTTP requests.
+          1. As part of the predict endpoint definition, a handler is also defined. The handler uses the PredictionEnginePool service to make predictions on incoming JSON requests that contain your model input data. The handler then returns the results of those predictions back to the client.
+          1. <MODEL-NAME>.mbconfig: The .mbconfig file for your model and generated training and consumption code. 
+      1. The Web API project does not use the Predict method in the .consumption.cs file. Instead, it registers PredictionEnginePool as a service by using dependency injection.
+      2. PredictionEngine is not thread-safe. You also have to create an instance of it everywhere it's needed within your application. As your application grows, this process can become unmanageable.
+      3. For improved performance and thread safety, use a combination of dependency injection and the PredictionEnginePool service, which creates an ObjectPool of PredictionEngine objects for use throughout your application.
+  * ![image](https://github.com/user-attachments/assets/6ca70dea-d03b-4a96-a31e-cc4490d1d709)
+
+
