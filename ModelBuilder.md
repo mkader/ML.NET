@@ -70,11 +70,8 @@
 * <img src="https://github.com/user-attachments/assets/cedf7b17-2fdb-4a85-9b3f-48850a2eb0df">
 
 
-
-* Choose your environment
-  1. Now that you've selected the data classification, it's time to choose the environment where you want to train your machine learning model.
-  2. Environments describe the compute resources that you'll use to train your machine learning model.
-
+### STEP 2: Choose your environment 
+* To train ML model.
 * Supported environments in Model Builder
 
 | Scenario	| Local CPU	| Local GPU	| Azure GPU |
@@ -94,33 +91,28 @@
   2. Using a GPU can often speed up the training process.
   3. If you don't have a GPU or a computer with enough CPU or RAM, offloading the training process to Azure can lighten the load on your system.
 
-* Load and prepare your data
-  1. Data is the most important component for building machine learning models. The process for loading data into Model Builder consists of three steps:
-      1. Choose your data source type.
-      1. Provide the location of your data.
-      1. Choose column purpose.
-      1. Choose your data source type
+ * ![image](https://github.com/user-attachments/assets/a9105aa7-a125-496a-95b0-23fde5c6a215)
 
-* Depending on your scenario, Model Builder supports loading data from the following sources:
-  1. Delimited files (comma, semicolon, and tab)
-  1. Local and remote SQL Server databases
-  1. Images (.jpg and .png)
-  1. Provide the location of your data
+### STEP 3: Load and prepare your data
+* Data is the most important component for building ML models. The process for loading data into Model Builder consists of three steps:
+  1. Choose your data source type. 2. Provide the location of your data. 3. Choose column purpose.
 
-* After you've selected your data source type, you have to provide the location where your dataset is stored. This location can be a directory, file path, or database connection string. It's dependent on the scenario and data source type that you've selected.
+* Choose your data source type, Model Builder supports loading data from the following sources:
+  1. Delimited files (comma, semicolon, and tab), 2. Local and remote SQL Server dbs, 3. Images (.jpg and .png), 4. Provide the location of your data
 
+* After selected data source type, provide the location (a directory, file path, or db connection string) where your dataset is stored.
+  
 * When a data source is selected in Model Builder, it parses the data and makes its best effort to identify:
-  1. Headers and column names
-  1. Column separator
-  1. Column data types
-  1. Column purpose
-  1. Decimal separators
+  1. Headers and column names, 2. Column separator, 3. Column data types, 4. Column purpose, 5. Decimal separators
 
 *After the data is loaded, Model Builder displays a preview of some of the elements in your dataset.
 
 * Choose column purpose
-  1. In scenarios like data classification and value prediction, you'll have to choose which of your columns is the column that you want to predict (label).
+  1. In scenarios like data classification and value prediction, choose which of columns is the column that you want to predict (label).
   1. By default, all other columns that are not the label are used as features. Features are columns used as inputs to predict the label.
+
+* ![image](https://github.com/user-attachments/assets/b218a09e-5181-4cd7-927b-f8adc98d5e98)
+
 
 * Advanced data options
   1. To customize how your data is loaded, Model Builder provides advanced data options. These options allow you to customize settings that pertain to your columns and dataset formatting.
@@ -163,56 +155,7 @@
 
 
 
-Machine learning tasks tend to fall into two categories:
 
-Supervised
-Unsupervised
-The main difference between them is whether the label, or the value that you're trying to predict, is known or not.
-
-For supervised tasks, the label is known. Examples of supervised machine learning tasks include:
-
-Classification
-Binary (two categories)
-Multiclass (two or more categories)
-Image
-Regression
-For unsupervised tasks, the label is unknown. Examples of unsupervised machine learning tasks include:
-
-Clustering
-Anomaly detection
-Supported scenarios in Model Builder
-Model Builder supports the following scenarios that map to machine learning tasks:
-
-Scenario	Machine learning task	Use case
-Data classification	Binary and multiclass classification	Organize articles by topic.
-Value prediction	Linear regression	Predict the price of a home based on features of the home.
-Image classification	Image classification (deep learning)	Organize images by animal species based on the content of an image.
-Recommendation	Recommendation	Recommend movies based on the preferences of similar users.
-Object detection	Object detection (deep learning)	Identify physical damage in an image.
-Choosing a scenario for predictive maintenance
-Depending on what your data looks like, the predictive maintenance problem can be modeled through different tasks. For your use case, because the label is a binary value (0 or 1) that describes whether a machine is broken or not, the data classification scenario is appropriate.
-
-Choose your environment
-Now that you've selected the data classification, it's time to choose the environment where you want to train your machine learning model. Environments describe the compute resources that you'll use to train your machine learning model.
-
-Supported environments in Model Builder
-Model Builder supports the following environment options:
-
-Scenario	Local CPU	Local GPU	Azure GPU
-Data classification	✔️	❌	❌
-Value prediction	✔️	❌	❌
-Image classification	✔️	✔️	✔️
-Recommendation	✔️	❌	❌
-Object detection	❌	❌	✔️
-Depending on your use case, there are various reasons why you might choose a local or Azure environment.
-
-Local environments
-Reasons why you might consider local compute environments include:
-
-Training locally doesn't cost you anything because you're using your computer's resources.
-You don't want your data to leave your computer or datacenter.
-Azure environments
-Scenarios like image classification and object detection are resource intensive. Using a GPU can often speed up the training process. If you don't have a GPU or a computer with enough CPU or RAM, offloading the training process to Azure can lighten the load on your system.
 
 Load and prepare your data
 With your scenario and training environment selected, it's time to load and prepare your data.
