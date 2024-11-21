@@ -27,17 +27,23 @@
   1. This is ideal for training models in real-world scenarios where you don't want the results to depend on a specific seed.
 
  * Recommendation in Practice
-  1. During development and testing, start with a fixed seed (new MLContext(seed: 1)).
-  1. Pipeline is finalized and moving towards production, switch to non-deterministic behavior (new MLContext()) for more realistic results, unless reproducibility is still a requirement.
+   1. During development and testing, start with a fixed seed (new MLContext(seed: 1)).
+   1. Pipeline is finalized and moving towards production, switch to non-deterministic behavior (new MLContext()) for more realistic results, unless reproducibility is still a requirement.
 
   * ML.Net Algorithm
-    1. SDCA (Stochastic Dual Coordinate Ascent) algorithm, used for training models in regression and classification tasks.
-    2. FastForest (Fast Forest) algorithm, an implementation of a random forest model used for regression and classification tasks. It is part of the ensemble learning methods that combine predictions from multiple decision trees to achieve better performance.
-    3. OnlineGradientDescent is an implementation of the Stochastic Gradient Descent (SGD) optimization algorithm, used primarily for linear regression tasks. It trains models by iteratively updating weights based on the gradient of the loss function with respect to the model's parameters.
-    4. LbfgsPoissonRegression, uses Limited-memory Broyden–Fletcher–Goldfarb–Shanno (LBFGS) optimization to train a Poisson regression model. It is specifically designed for regression tasks where the target variable represents count data or follows a Poisson distribution (e.g., predicting the number of events that occur in a fixed interval).
-    5. Gam (Generalized Additive Models) used for regression and binary classification tasks. GAMs are interpretable models that strike a balance between simplicity and flexibility, making them ideal for understanding the relationship between input features and the target variable.
-    6. FastTree, an implementation of the gradient-boosted decision tree (GBDT) algorithm. It is used for regression, binary classification, and ranking tasks. The algorithm builds an ensemble of decision trees by iteratively improving the model’s predictions, focusing on areas where the current model performs poorly.
-    7. FastTreeTweedie, a variation of the FastTree algorithm specifically designed for regression tasks where the target variable is continuous and exhibits a Tweedie distribution. This type of distribution is particularly useful for modeling data with mixed characteristics, such as zero-inflated continuous data, which is common in insurance or actuarial domains.
+    1. SDCA (Stochastic Dual Coordinate Ascent) - used for training models in regression and classification tasks.
+    2. FastForest (Fast Forest) - an implementation of a random forest model used for regression and classification tasks.
+       1. It is part of the ensemble learning methods that combine predictions from multiple decision trees to achieve better performance.
+    4. OnlineGradientDescent - is an implementation of the Stochastic Gradient Descent (SGD) optimization algorithm, used primarily for linear regression tasks.
+       1. It trains models by iteratively updating weights based on the gradient of the loss function with respect to the model's parameters.
+    6. LbfgsPoissonRegression - uses Limited-memory Broyden–Fletcher–Goldfarb–Shanno (LBFGS) optimization to train a Poisson regression model.
+       1. It is specifically designed for regression tasks where the target variable represents count data or follows a Poisson distribution (e.g., predicting the number of events that occur in a fixed interval).
+    8. Gam (Generalized Additive Models) - used for regression and binary classification tasks.
+       1. GAMs are interpretable models that strike a balance between simplicity and flexibility, making them ideal for understanding the relationship between input features and the target variable.
+    10. FastTree - an implementation of the gradient-boosted decision tree (GBDT) algorithm.
+       1. It is used for regression, binary classification, and ranking tasks. The algorithm builds an ensemble of decision trees by iteratively improving the model’s predictions, focusing on areas where the current model performs poorly.
+    12. FastTreeTweedie - a variation of the FastTree algorithm specifically designed for regression tasks where the target variable is continuous and exhibits a Tweedie distribution.
+       1. This type of distribution is particularly useful for modeling data with mixed characteristics, such as zero-inflated continuous data, which is common in insurance or actuarial domains.
 
 * 1.Create a Model
 ```csharp
@@ -77,10 +83,9 @@ var pipeline = mlContext.Transforms.Concatenate("Features", new[] { "YearsOfExpe
     .Append(mlContext.Regression.Trainers.Sdca(labelColumnName: "Salary", maximumNumberOfIterations: 100));
 
 var model = pipeline.Fit(trainingData);
-
 ```
 
-* 2. Make a prediction
+* 2.Make a prediction
 ```csharp
 var predictionEngine = mlContext.Model.CreatePredictionEngine<InputModel, ResultModel>(model);
 var experience = new InputModel { YearsOfExperience = 8 };
@@ -88,7 +93,7 @@ var result = predictionEngine.Predict(experience);
 Console.WriteLine($"Predicted salary for {experience.YearsOfExperience} years of experience: {result.Salary}");
 ```
 
-* 3. Evaluate the model - with test data
+* 3.Evaluate the model - with test data
 ```csharp
 var testData = new List<InputModel> {
     new InputModel { YearsOfExperience = 1.3F, Salary = 46200 },
@@ -112,7 +117,7 @@ Console.WriteLine(
     );
 ```
 
-* 4. Split data
+* 4.Split data
    1. A value of 0.2 means 20% of the data will go to the test set, and the remaining 80% will be used as the training set.
    1. split.TrainSet: The training data (80% in this case).
    1. split.TestSet: The test data(20 % in this case).
