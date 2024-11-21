@@ -6,4 +6,9 @@
 * https://learn.microsoft.com/en-us/dotnet/machine-learning/?WT.mc_id=dotnet-35129-website
 * https://dotnet.microsoft.com/en-us/learn/ml-dotnet
 
+https://www.youtube.com/watch?v=QPLSOpHmyAE&list=PLZmfj7vJb0aFfPEvaImQvEA3MldAkXa55&index=7
+
+https://www.youtube.com/watch?v=Wpm-c17rujY&list=PLZmfj7vJb0aFfPEvaImQvEA3MldAkXa55&index=8
+
+
 
