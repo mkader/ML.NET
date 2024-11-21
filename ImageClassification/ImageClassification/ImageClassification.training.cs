@@ -9,7 +9,7 @@ using Microsoft.ML.Data;
 using Microsoft.ML.Vision;
 using Microsoft.ML;
 
-namespace Solera_POC_ML
+namespace POC_ML
 {
     public partial class ImageClassification
     {

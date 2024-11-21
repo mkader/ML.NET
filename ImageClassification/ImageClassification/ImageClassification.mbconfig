@@ -3,7 +3,7 @@
   "DataSource": {
     "Type": "Folder",
     "Version": 1,
-    "FolderPath": "C:\\solera\\solera.poc\\src\\Solera.POC.ML\\Datasets\\ImageClassification\\sample-images"
+    "FolderPath": "Datasets\\sample-images"
   },
   "Environment": {
     "Type": "LocalCPU",
@@ -48,7 +48,7 @@
     },
     "Schema": "e0 * e1 * e2",
     "MetricName": "MicroAccuracy",
-    "ModelFilePath": "C:\\solera\\solera.poc\\src\\Solera.POC.ML\\ImageClassification.mlnet"
+    "ModelFilePath": "ImageClassification.mlnet"
   },
   "Type": "TrainingConfig",
   "Version": 5,

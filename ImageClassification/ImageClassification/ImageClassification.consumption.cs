@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.IO;
 using System.Collections.Generic;
-namespace Solera_POC_ML
+namespace POC_ML
 {
     public partial class ImageClassification
     {
