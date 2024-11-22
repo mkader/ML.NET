@@ -45,34 +45,19 @@
     12. FastTreeTweedie - a variation of the FastTree algorithm specifically designed for regression tasks where the target variable is continuous and exhibits a Tweedie distribution.
         1. This type of distribution is particularly useful for modeling data with mixed characteristics, such as zero-inflated continuous data, which is common in insurance or actuarial domains.
 
-* 1.Create a Model
+### 1. Create a Model
 ```csharp
 var mlContext = new MLContext();
 var data = new List<InputModel>()
 {
-    new InputModel { YearsOfExperience = 1, Salary = 39000 },
-    new InputModel { YearsOfExperience = 1.3F, Salary = 46200 },
-    new InputModel { YearsOfExperience = 1.5F, Salary = 37700 },
-    new InputModel { YearsOfExperience = 2, Salary = 43500 },
-    new InputModel { YearsOfExperience = 2.2f, Salary = 40000 },
-    new InputModel { YearsOfExperience = 2.9f, Salary = 56000 },
-    new InputModel { YearsOfExperience = 3, Salary = 60000 },
-    new InputModel { YearsOfExperience = 3.3f, Salary = 64000 },
-    new InputModel { YearsOfExperience = 3.7f, Salary = 57000 },
-    new InputModel { YearsOfExperience = 3.9f, Salary = 63000 },
-    new InputModel { YearsOfExperience = 4, Salary = 55000 },
-    new InputModel { YearsOfExperience = 4, Salary = 58000 },
-    new InputModel { YearsOfExperience = 4.1f, Salary = 57000 },
-    new InputModel { YearsOfExperience = 4.5f, Salary = 61000 },
-    new InputModel { YearsOfExperience = 4.9f, Salary = 68000 },
-    new InputModel { YearsOfExperience = 5.3f, Salary = 83000 },
-    new InputModel { YearsOfExperience = 5.9f, Salary = 82000 },
-    new InputModel { YearsOfExperience = 6, Salary = 94000 },
-    new InputModel { YearsOfExperience = 6.8f, Salary = 91000 },
-    new InputModel { YearsOfExperience = 7.1f, Salary = 98000 },
-    new InputModel { YearsOfExperience = 7.9f, Salary = 101000 },
-    new InputModel { YearsOfExperience = 8.2f, Salary = 114000 },
-    new InputModel { YearsOfExperience = 8.9f, Salary = 109000 }
+    new InputModel { YearsOfExperience = 1, Salary = 39000 }, new InputModel { YearsOfExperience = 1.3F, Salary = 46200 },  new InputModel { YearsOfExperience = 1.5F, Salary = 37700 },
+    new InputModel { YearsOfExperience = 2, Salary = 43500 }, new InputModel { YearsOfExperience = 2.2f, Salary = 40000 },   new InputModel { YearsOfExperience = 2.9f, Salary = 56000 },
+    new InputModel { YearsOfExperience = 3, Salary = 60000 }, new InputModel { YearsOfExperience = 3.3f, Salary = 64000 },  new InputModel { YearsOfExperience = 3.7f, Salary = 57000 },
+    new InputModel { YearsOfExperience = 3.9f, Salary = 63000 }, new InputModel { YearsOfExperience = 4, Salary = 55000 },  new InputModel { YearsOfExperience = 4, Salary = 58000 },
+    new InputModel { YearsOfExperience = 4.1f, Salary = 57000 }, new InputModel { YearsOfExperience = 4.5f, Salary = 61000 },  new InputModel { YearsOfExperience = 4.9f, Salary = 68000 },
+    new InputModel { YearsOfExperience = 5.3f, Salary = 83000 }, new InputModel { YearsOfExperience = 5.9f, Salary = 82000 }, new InputModel { YearsOfExperience = 6, Salary = 94000 },
+    new InputModel { YearsOfExperience = 6.8f, Salary = 91000 }, new InputModel { YearsOfExperience = 7.1f, Salary = 98000 }, new InputModel { YearsOfExperience = 7.9f, Salary = 101000 },
+    new InputModel { YearsOfExperience = 8.2f, Salary = 114000 }, new InputModel { YearsOfExperience = 8.9f, Salary = 109000 }
 };
 
 // Load and preprocess data
@@ -82,11 +67,42 @@ var trainingData = mlContext.Data.LoadFromEnumerable(data);
 var pipeline = mlContext.Transforms.Concatenate("Features", new[] { "YearsOfExperience" })
     .Append(mlContext.Regression.Trainers.Sdca(labelColumnName: "Salary", maximumNumberOfIterations: 100));
 
+//the output of the pipeline after being fit to the training data. It contains all the learned parameters and transformations required for prediction.
 var model = pipeline.Fit(trainingData);
 ```
 
-* 2.Make a prediction
+### Save a model
+* Code
+  1. Save - Used to save a trained ML model to a file, it includes all transformations, trainers, and parameters needed to make predictions.
+  1. Schema - The schema of the training data, which defines the structure of the data (e.g., column names, types).
+  1. .zip (.mlnet) - the model is serialized and stored as a .zip file, which can later be loaded back into an ML.NET application.
+* Purpose
+  1. The saved model can be reused in other applications or processes without retraining.
+  1. Once the model is trained and saved, it can be quickly loaded for predictions without incurring the cost of retraining.
+* When to Use
+  1. After training a ML model, you save it for: Deployment in prod envs, Sharing with other teams or systems, Avoiding retraining when predictions need to be made multiple times.
 ```csharp
+// 1.Create a Model code
+mlContext.Model.Save(model, trainingData.Schema, "SalaryPredictionModel.zip");
+```
+
+* Example Usage
+```csharp
+DataViewSchema modelSchema;
+ITransformer loadedModel = mlContext.Model.Load("SalaryPredictionModel.zip", out modelSchema);
+
+// Use loadedModel to make predictions
+var predictionEngine = mlContext.Model.CreatePredictionEngine<InputData, PredictionResult>(loadedModel);
+var result = predictionEngine.Predict(new InputData { YearsExperience = 5 });
+
+Console.WriteLine($"Predicted Salary: {result.PredictedSalary}");
+```
+
+
+
+### 2. Make a prediction
+```csharp
+// 1.Create a Model code
 var predictionEngine = mlContext.Model.CreatePredictionEngine<InputModel, ResultModel>(model);
 var experience = new InputModel { YearsOfExperience = 8 };
 var result = predictionEngine.Predict(experience);
@@ -95,6 +111,7 @@ Console.WriteLine($"Predicted salary for {experience.YearsOfExperience} years of
 
 * 3.Evaluate the model - with test data
 ```csharp
+// 1.Create a Model code
 var testData = new List<InputModel> {
     new InputModel { YearsOfExperience = 1.3F, Salary = 46200 },
     new InputModel { YearsOfExperience = 2.9F, Salary = 56000 },
