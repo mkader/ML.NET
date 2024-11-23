@@ -246,3 +246,48 @@ var metrics = mlContext.Regression.Evaluate(model.Transform(testDataview), label
 
 Console.WriteLine($"R^2: {metrics.RSquared:0.00}");
 ```
+
+ ### Load data from TextFile - single, multi files - same or different folder
+ * single files
+ ```chsarp
+// LoadFileInputModel and InputModel - difference is LoadColumn attribute
+//load data from csv file
+//var dataView = mlContext.Data.LoadFromTextFile<LoadFileInputModel>(
+//    path: @"C:\solera\solera.poc\src\Solera.POC.ML\Regression_ValuePrediction\Salary\train-dataset.csv",
+//    separatorChar: ',', hasHeader: true);
+
+//load tab delimited file, no header in file, so hasHeader is false or removed.
+//var dataView = mlContext.Data.LoadFromTextFile<LoadFileInputModel>(
+//   path: @"C:\solera\solera.poc\src\Solera.POC.ML\Regression_ValuePrediction\Salary\train-dataset.tsv", hasHeader: true);
+
+//var columnsToLoad = new TextLoader.Column[]
+//{
+//    new TextLoader.Column("YearsOfExperience", DataKind.Single, 0),
+//    new TextLoader.Column("Salary", DataKind.Single, 1)
+//};
+
+//var dataView = mlContext.Data.LoadFromTextFile(
+//   path: @"C:\solera\solera.poc\src\Solera.POC.ML\Regression_ValuePrediction\Salary\train-dataset.csv",
+//   separatorChar: ',', hasHeader: true, columns: columnsToLoad);
+```
+
+* multi files - same folder
+```chsarp
+//var dataView = mlContext.Data.LoadFromTextFile<LoadFileInputModel>(
+//    path: @"C:\solera\solera.poc\src\Solera.POC.ML\Regression_ValuePrediction\Salary\train-datasets\*",
+//    separatorChar: ',', hasHeader: false);
+```
+
+```chsarp
+// multi files - different folder
+var textLoader = mlContext.Data.CreateTextLoader<LoadFileInputModel>(separatorChar: ',');
+var dataView = textLoader.Load(
+    @"C:\solera\solera.poc\src\Solera.POC.ML\Regression_ValuePrediction\Salary\train-datasets\train-dataset1.csv",
+    @"C:\solera\solera.poc\src\Solera.POC.ML\Regression_ValuePrediction\Salary\train-datasets\train-dataset2.csv");
+
+// Development purpose, not for production.
+// default is 100 rows, use maxRows to load all rows
+var preview = dataView.Preview();
+```
+![image](https://github.com/user-attachments/assets/ef5097ba-ce27-4b0f-8e67-1424d1732fee)
+
