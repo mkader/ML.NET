@@ -60,7 +60,7 @@ var data = new List<InputModel>()
     new InputModel { YearsOfExperience = 8.2f, Salary = 114000 }, new InputModel { YearsOfExperience = 8.9f, Salary = 109000 }
 };
 
-// Load and preprocess data
+// Load and preprocess data. LoadFromEnumerable - Loads the data from an in-memory collection (data) into an IDataView.
 var trainingData = mlContext.Data.LoadFromEnumerable(data);
 
 // Train a model
@@ -79,8 +79,10 @@ var model = pipeline.Fit(trainingData);
 * Purpose
   1. The saved model can be reused in other applications or processes without retraining.
   1. Once the model is trained and saved, it can be quickly loaded for predictions without incurring the cost of retraining.
-* When to Use
-  1. After training a ML model, you save it for: Deployment in prod envs, Sharing with other teams or systems, Avoiding retraining when predictions need to be made multiple times.
+* When to Use - After training a ML model, you save it for:
+  1. Deployment in prod envs
+  2. Sharing with other teams or systems
+  3. Avoiding retraining when predictions need to be made multiple times.
 ```csharp
 // 1.Create a Model code
 mlContext.Model.Save(model, trainingData.Schema, "SalaryPredictionModel.zip");
@@ -97,9 +99,6 @@ var result = predictionEngine.Predict(new InputData { YearsExperience = 5 });
 
 Console.WriteLine($"Predicted Salary: {result.PredictedSalary}");
 ```
-
-
-
 ### 2. Make a prediction
 ```csharp
 // 1.Create a Model code
@@ -125,30 +124,124 @@ var testDataview = mlContext.Data.LoadFromEnumerable(testData);
 
 var metrics = mlContext.Regression.Evaluate(model.Transform(testDataview), labelColumnName: "Salary");
 
-Console.WriteLine(
-    $"R^2: {metrics.RSquared:0.00}, " +
-    $"MA Error : {metrics.MeanAbsoluteError:0.00}, " +
-    $"MS Error : {metrics.MeanSquaredError:0.00}, " +
-    $"RMS Error : {metrics.RootMeanSquaredError:0.00}, " +
-    $"Loss Function : {metrics.LossFunction:0.00}"
-    );
+Console.WriteLine($"R^2: {metrics.RSquared:0.00}, MA Error : {metrics.MeanAbsoluteError:0.00}, " +
+    $"MS Error : {metrics.MeanSquaredError:0.00}, RMS Error : {metrics.RootMeanSquaredError:0.00}, " +
+    $"Loss Function : {metrics.LossFunction:0.00}");
 ```
 
-* 4.Split data
+* 4.Split data - Evaluate the model - with same dataset
    1. A value of 0.2 means 20% of the data will go to the test set, and the remaining 80% will be used as the training set.
    1. split.TrainSet: The training data (80% in this case).
    1. split.TestSet: The test data(20 % in this case).
    1. Purpose of Splitting the Dataset, is to evaluate your model's ability to generalize. By keeping part of the data unseen during training (the test set), you can check how well the model performs on new data.
  ```csharp 
+ var trainingData = mlContext.Data.LoadFromEnumerable(data);
+
+ var pipeline = mlContext.Transforms.Concatenate("Features", new[] { "YearsOfExperience" })
+    .Append(mlContext.Regression.Trainers.Sdca(labelColumnName: "Salary", maximumNumberOfIterations: 100));
+
  var split = mlContext.Data.TrainTestSplit(trainingData, testFraction: 0.2);
  var model = pipeline.Fit(split.TrainSet);
  var metrics = mlContext.Regression.Evaluate(model.Transform(split.TestSet), labelColumnName: "Salary");
 
- Console.WriteLine(
-     $"R^2: {metrics.RSquared:0.00}, " +
-     $"MA Error : {metrics.MeanAbsoluteError:0.00}, " +
-     $"MS Error : {metrics.MeanSquaredError:0.00}, " +
-     $"RMS Error : {metrics.RootMeanSquaredError:0.00}, " +
-     $"Loss Function : {metrics.LossFunction:0.00}"
-     );
+ Console.WriteLine($"R^2: {metrics.RSquared:0.00}, MA Error : {metrics.MeanAbsoluteError:0.00}, " +
+    $"MS Error : {metrics.MeanSquaredError:0.00}, RMS Error : {metrics.RootMeanSquaredError:0.00}, " +
+    $"Loss Function : {metrics.LossFunction:0.00}");
+```
+### Cross Validate Model
+* Splits the data into 5 folds (default is usually 80% training and 20% validation per fold).
+* Trains and evaluates the model on each fold.
+* Output - Returns a collection of results (crossValidateResult), each containing:
+   1. Model: The trained model for the fold.
+   1. Metrics: Evaluation metrics for that fold.
+* Runs cross-validation to evaluate the pipeline on different data splits.
+```csharp
+ //4.Cross Validate Model
+ var trainingData = mlContext.Data.LoadFromEnumerable(data);
+
+ var pipeline = mlContext.Transforms.Concatenate("Features", new[] { "YearsOfExperience" })
+   .Append(mlContext.Regression.Trainers.Sdca(labelColumnName: "Salary", maximumNumberOfIterations: 100));
+
+ var crossValidateResult = mlContext.Regression.CrossValidate(trainingData, pipeline, numberOfFolds: 5, labelColumnName: "Salary");
+
+// Extracting Metrics and Models
+ var allMetrics = crossValidateResult.Select(fold => fold.Metrics);
+ var allModesl = crossValidateResult.Select(fold => fold.Model);
+
+//Evaluating Each Fold
+ foreach (var metrics in allMetrics)
+ {
+     Console.WriteLine($"R^2: {metrics.RSquared:0.00}, MA Error : {metrics.MeanAbsoluteError:0.00}, " +
+       $"MS Error : {metrics.MeanSquaredError:0.00}, RMS Error : {metrics.RootMeanSquaredError:0.00}, " +
+       $"Loss Function : {metrics.LossFunction:0.00}");
+ }
+
+// Finding the Best-Performing Model
+
+// Sorts all metrics by  model.RSquared(higher is better) and picks the fold with the highest model.RSquared
+ var bestPerformance = allMetrics.OrderByDescending(model => model.RSquared).First();
+
+//Finds the index of the best metrics and retrieves the corresponding model from allModels.
+ var bestPerformanceIndex = allMetrics.ToList().IndexOf(bestPerformance);
+ var bestModel = allModesl.ElementAt(bestPerformanceIndex);
+
+ Console.WriteLine("Average Data");
+
+ Console.WriteLine($"R^2: {allMetrics.Average(x => x.RSquared):0.00}," +
+     $" MA Error : {allMetrics.Average(x => x.MeanAbsoluteError):0.00}, " +
+       $"MS Error : {allMetrics.Average(x => x.MeanSquaredError):0.00}, " +
+       $"RMS Error : {allMetrics.Average(x => x.RootMeanSquaredError):0.00}, " +
+       $"Loss Function : {allMetrics.Average(x => x.LossFunction):0.00}");
+```
+![image](https://github.com/user-attachments/assets/2dde6c50-faaf-4a98-a9a6-8e23c20c8116)
+
+### Algorithms & Hyperparameters
+```csharp
+var trainingData = mlContext.Data.LoadFromEnumerable(data);
+
+var estimator = mlContext.Transforms.Concatenate("Features", new[] { "YearsOfExperience" });
+
+// SDCA Regression (100 iterations) - Achieves R²: 0.91, which indicates a strong fit.
+// Performs well, as Stochastic Dual Coordinate Ascent (SDCA) is effective for regression tasks.
+var pipeline = estimator.Append(mlContext.Regression.Trainers.Sdca(labelColumnName: "Salary", maximumNumberOfIterations: 100)); //output => R^2: 0.91
+
+// SDCA Regression (10 iterations) - Results in R²: 0.52, showing underfitting due to fewer iterations.
+var pipeline = estimator.Append(mlContext.Regression.Trainers.Sdca(labelColumnName: "Salary", maximumNumberOfIterations: 10)); //output => R^2: 0.52
+
+// SDCA with L1/L2 Regularization - Produces R²: 0.78, suggesting slight underfitting due to regularization penalties.
+// Adding L1 and L2 regularization helps prevent overfitting but might reduce performance slightly if the data doesn't require regularization.
+var pipeline = estimator.Append(mlContext.Regression.Trainers.Sdca(labelColumnName: "Salary", maximumNumberOfIterations: 100, l1Regularization:2, l2Regularization:2)); //output => R^2: 0.78
+
+// LBFGS Poisson Regression - Delivers R²: 0.96, the best result, indicating excellent fit to the data.
+// This method is highly accurate for the given data. LBFGS is a robust optimizer, and Poisson regression is suitable for certain types of regression problems.
+var pipeline = estimator.Append(mlContext.Regression.Trainers.LbfgsPoissonRegression(labelColumnName: "Salary")); //output => R^2: 0.96
+
+// LBFGS with High Optimization Tolerance - Produces R²: -9.91, a poor result due to inappropriate optimization parameters.
+// Poor performance likely due to an overly high optimization tolerance, causing the model to diverge.
+var pipeline = estimator.Append(mlContext.Regression.Trainers.LbfgsPoissonRegression(labelColumnName: "Salary", optimizationTolerance:100)); //output => R^2: -9.91
+
+// Online Gradient Descent (default) - Results in R²: 0.27, showing significant underfitting.
+// This online algorithm updates weights iteratively but is less effective for this dataset. It underfits the data.
+var pipeline = estimator.Append(mlContext.Regression.Trainers.OnlineGradientDescent(labelColumnName: "Salary")); //output => R^2: 0.27
+
+// Online Gradient Descent (100 iterations) - Achieves R²: 0.91, comparable to SDCA with 100 iterations.
+// Increasing iterations improves model accuracy significantly, matching SDCA's performance.
+var pipeline = estimator.Append(mlContext.Regression.Trainers.OnlineGradientDescent(labelColumnName: "Salary", numberOfIterations:100)); //output => R^2: 0.91
+
+var model = pipeline.Fit(trainingData);
+
+var testData = new List<InputModel> {
+    new InputModel { YearsOfExperience = 1.3F, Salary = 46200 },
+    new InputModel { YearsOfExperience = 2.9F, Salary = 56000 },
+    new InputModel { YearsOfExperience = 3.2F, Salary = 54000 },
+    new InputModel { YearsOfExperience = 3.9F, Salary = 63000 },
+    new InputModel { YearsOfExperience = 4.1F, Salary = 57000 },
+    new InputModel { YearsOfExperience = 7.1F, Salary = 98000 }
+};
+
+var testDataview = mlContext.Data.LoadFromEnumerable(testData);
+
+var metrics = mlContext.Regression.Evaluate(model.Transform(testDataview), labelColumnName: "Salary");
+
+Console.WriteLine($"R^2: {metrics.RSquared:0.00}");
 ```
