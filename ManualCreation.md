@@ -247,43 +247,54 @@ var metrics = mlContext.Regression.Evaluate(model.Transform(testDataview), label
 Console.WriteLine($"R^2: {metrics.RSquared:0.00}");
 ```
 
- ### Load data from TextFile - single, multi files - same or different folder
- * single files
+ ### Load data from Datanase and  Text and binary File (single, multi files - same or different folder)
+ * single file - csv
  ```chsarp
 // LoadFileInputModel and InputModel - difference is LoadColumn attribute
-//load data from csv file
-//var dataView = mlContext.Data.LoadFromTextFile<LoadFileInputModel>(
-//    path: @"C:\solera\solera.poc\src\Solera.POC.ML\Regression_ValuePrediction\Salary\train-dataset.csv",
-//    separatorChar: ',', hasHeader: true);
+var dataView = mlContext.Data.LoadFromTextFile<LoadFileInputModel>(path: @"Salary\train-dataset.csv", separatorChar: ',', hasHeader: true);
+```
 
-//load tab delimited file, no header in file, so hasHeader is false or removed.
-//var dataView = mlContext.Data.LoadFromTextFile<LoadFileInputModel>(
-//   path: @"C:\solera\solera.poc\src\Solera.POC.ML\Regression_ValuePrediction\Salary\train-dataset.tsv", hasHeader: true);
+* single file - tsv (tab delimited), no header in file, so hasHeader is false or removed.
+```chsarp
+var dataView = mlContext.Data.LoadFromTextFile<LoadFileInputModel>(path: @"Salary\train-dataset.tsv", hasHeader: true);
+```
+* single file - without model.
+```chsarp
+var columnsToLoad = new TextLoader.Column[]
+{
+    new TextLoader.Column("YearsOfExperience", DataKind.Single, 0),
+    new TextLoader.Column("Salary", DataKind.Single, 1)
+};
 
-//var columnsToLoad = new TextLoader.Column[]
-//{
-//    new TextLoader.Column("YearsOfExperience", DataKind.Single, 0),
-//    new TextLoader.Column("Salary", DataKind.Single, 1)
-//};
-
-//var dataView = mlContext.Data.LoadFromTextFile(
-//   path: @"C:\solera\solera.poc\src\Solera.POC.ML\Regression_ValuePrediction\Salary\train-dataset.csv",
-//   separatorChar: ',', hasHeader: true, columns: columnsToLoad);
+var dataView = mlContext.Data.LoadFromTextFile(path: @"Salary\train-dataset.csv",  separatorChar: ',', hasHeader: true, columns: columnsToLoad);
 ```
 
 * multi files - same folder
 ```chsarp
 //var dataView = mlContext.Data.LoadFromTextFile<LoadFileInputModel>(
-//    path: @"C:\solera\solera.poc\src\Solera.POC.ML\Regression_ValuePrediction\Salary\train-datasets\*",
+//    path: @"Salary\train-datasets\*",
 //    separatorChar: ',', hasHeader: false);
 ```
 
+* multi files - different folder
 ```chsarp
-// multi files - different folder
 var textLoader = mlContext.Data.CreateTextLoader<LoadFileInputModel>(separatorChar: ',');
-var dataView = textLoader.Load(
-    @"C:\solera\solera.poc\src\Solera.POC.ML\Regression_ValuePrediction\Salary\train-datasets\train-dataset1.csv",
-    @"C:\solera\solera.poc\src\Solera.POC.ML\Regression_ValuePrediction\Salary\train-datasets\train-dataset2.csv");
+var dataView = textLoader.Load(@"Salary\train-datasets\train-dataset1.csv", @"Salary\train-datasets\train-dataset2.csv");
+```
+
+ * single file - binary
+ *  ```chsarp
+var dataView = mlContext.Data.LoadFromBinary(Salary\train-dataset.bin");
+```
+
+* load from Database
+```chsarp
+ var dbLoader = mlContext.Data.CreateDatabaseLoader<InputModel>();
+ var conStr = @"Server=.;Database=mlnet;Integrated Security=True;TrustServerCertificate=True;";
+ var qry = @"SELECT YearsOfExperience, Salary FROM [mlnet].[dbo].[SalaryInfo]";
+ var dbSource = new DatabaseSource(SqlClientFactory.Instance, conStr, qry);
+ IDataView dataView = dbLoader.Load(dbSource);
+```
 
 // Development purpose, not for production.
 // default is 100 rows, use maxRows to load all rows
