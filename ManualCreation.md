@@ -72,7 +72,7 @@ var pipeline = mlContext.Transforms.Concatenate("Features", new[] { "YearsOfExpe
 var model = pipeline.Fit(trainingData);
 ```
 
-### Save a model
+### Save and Load a model
 * Code
   1. Save - Used to save a trained ML model to a file, it includes all transformations, trainers, and parameters needed to make predictions.
   1. Schema - The schema of the training data, which defines the structure of the data (e.g., column names, types).
@@ -86,13 +86,35 @@ var model = pipeline.Fit(trainingData);
   3. Avoiding retraining when predictions need to be made multiple times.
 ```csharp
 // 1.Create a Model code
+//save model
 mlContext.Model.Save(model, trainingData.Schema, "SalaryPredictionModel.zip");
+
+OR 
+using (FileStream stream = new FileStream(@"SalaryPredictionModel.zip", FileMode.Create)) 
+{
+    mlContext.Model.Save(model, trainingData.Schema, stream);
+}
+
+OR
+var file = new MultiFileSource(@"combined.csv");
+// new MultiFileSource("combined.csv", "combined2.csv").
+var dataLoader = mlContext.Data.CreateTextLoader<InputModel>(separatorChar: ',', hasHeader: true, dataSample: file);
+mlContext.Model.Save(model, dataLoader, @"SalaryPredictionModel.zip");
 ```
 
-* Example Usage
+* Load model
 ```csharp
-DataViewSchema modelSchema;
-ITransformer loadedModel = mlContext.Model.Load("SalaryPredictionModel.zip", out modelSchema);
+ITransformer loadedModel = mlContext.Model.Load("SalaryPredictionModel.zip", out DataViewSchema modelSchema);
+
+OR
+
+ ITransformer loadedModel;
+
+ using (FileStream stream = new FileStream(@"SalaryPredictionModel.zip", FileMode.OpenOrCreate))
+     loadedModel = mlContext.Model.Load(stream, out DataViewSchema modelSchema);
+
+OR
+mlContext.Model.LoadWithDataLoader(@"SalaryPredictionModel.zip", out IDataLoader<IMultiStreamSource> loader);
 
 // Use loadedModel to make predictions
 var predictionEngine = mlContext.Model.CreatePredictionEngine<InputData, PredictionResult>(loadedModel);
