@@ -271,9 +271,7 @@ var dataView = mlContext.Data.LoadFromTextFile(path: @"Salary\train-dataset.csv"
 
 * multi files - same folder
 ```chsarp
-//var dataView = mlContext.Data.LoadFromTextFile<LoadFileInputModel>(
-//    path: @"Salary\train-datasets\*",
-//    separatorChar: ',', hasHeader: false);
+var dataView = mlContext.Data.LoadFromTextFile<LoadFileInputModel>(path: @"Salary\train-datasets\*", separatorChar: ',', hasHeader: false);
 ```
 
 * multi files - different folder
@@ -282,8 +280,8 @@ var textLoader = mlContext.Data.CreateTextLoader<LoadFileInputModel>(separatorCh
 var dataView = textLoader.Load(@"Salary\train-datasets\train-dataset1.csv", @"Salary\train-datasets\train-dataset2.csv");
 ```
 
- * single file - binary
- *  ```chsarp
+* single file - binary
+```chsarp
 var dataView = mlContext.Data.LoadFromBinary(Salary\train-dataset.bin");
 ```
 
@@ -296,8 +294,8 @@ var dataView = mlContext.Data.LoadFromBinary(Salary\train-dataset.bin");
  IDataView dataView = dbLoader.Load(dbSource);
 ```
 
-// Development purpose, not for production.
-// default is 100 rows, use maxRows to load all rows
+* Development purpose, not for production. Default is 100 rows, use maxRows to load all rows
+```chsarp
 var preview = dataView.Preview();
 ```
 ![image](https://github.com/user-attachments/assets/ef5097ba-ce27-4b0f-8e67-1424d1732fee)
