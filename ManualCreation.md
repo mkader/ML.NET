@@ -282,15 +282,17 @@ var dataView = textLoader.Load(@"Salary\train-datasets\train-dataset1.csv", @"Sa
 
 * single file - binary
 ```chsarp
-var dataView = mlContext.Data.LoadFromBinary(Salary\train-dataset.bin");
+var dataView = mlContext.Data.LoadFromBinary"(Salary\train-dataset.bin");
 ```
 
 * load from Database
 ```chsarp
  var dbLoader = mlContext.Data.CreateDatabaseLoader<InputModel>();
+
  var conStr = @"Server=.;Database=mlnet;Integrated Security=True;TrustServerCertificate=True;";
  var qry = @"SELECT YearsOfExperience, Salary FROM [mlnet].[dbo].[SalaryInfo]";
  var dbSource = new DatabaseSource(SqlClientFactory.Instance, conStr, qry);
+
  IDataView dataView = dbLoader.Load(dbSource);
 ```
 
@@ -299,4 +301,51 @@ var dataView = mlContext.Data.LoadFromBinary(Salary\train-dataset.bin");
 var preview = dataView.Preview();
 ```
 ![image](https://github.com/user-attachments/assets/ef5097ba-ce27-4b0f-8e67-1424d1732fee)
+
+ ### Save data - csv, tsv, binary
+ ```chsarp
+ var textLoader = mlContext.Data.CreateTextLoader<InputModel>(separatorChar: ',');
+ var dataView = textLoader.Load(@train_datasets\1.csv", @"C:\ml_net\POC.MLNET\train_datasets\2.csv");
+
+ var list = mlContext.Data.CreateEnumerable<InputModel>(dataView, false).ToList();
+
+ using (FileStream stream = new FileStream(@"train_datasets\combined.tsv", FileMode.OpenOrCreate))
+ {
+     mlContext.Data.SaveAsText(dataView, stream);
+ }
+
+ using (FileStream stream = new FileStream(@"C:\ml_net\POC.MLNET\train_datasets\combined.csv", FileMode.OpenOrCreate))
+ {
+     mlContext.Data.SaveAsText(dataView, stream, separatorChar:',', headerRow:false, schema: false);
+ }
+
+ using (FileStream stream = new FileStream(@"C:\ml_net\POC.MLNET\train_datasets\combined.bin", FileMode.OpenOrCreate))
+ {
+     mlContext.Data.SaveAsBinary(dataView, stream);
+ }
+```
+![image](https://github.com/user-attachments/assets/be60a649-5e9a-403d-b62f-fd8f3dd36f99)
+
+### ShuffleRow, Skipped Data, Take Date and Filter
+ ```chsarp
+//shuffled data
+var shuffledData = mlContext.Data.ShuffleRows(dataView);
+preview = shuffledData.Preview();
+
+//skip first 8 records
+var skippedData = mlContext.Data.SkipRows(dataView, 8);
+preview = skippedData.Preview();
+
+//take first 8 records
+var takeData = mlContext.Data.TakeRows(dataView, 8);
+preview = takeData.Preview();
+
+//filter
+var filterByValue = mlContext.Data.FilterRowsByColumn(dataView, nameof(InputModel.YearsOfExperience), lowerBound: 3, upperBound: 6);
+preview = filterByValue.Preview();
+
+//filter by missing value in salary, removed NaN value
+var filterByMissingValue = mlContext.Data.FilterRowsByMissingValues(dataView, nameof(InputModel.Salary));
+preview = filterByMissingValue.Preview();
+```
 
