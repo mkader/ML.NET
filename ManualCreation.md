@@ -515,11 +515,6 @@ Console.WriteLine($"Prediction: {prediction.WillDelayBy15Minutes} | Score: {pred
      public float[] Score { get; set; }
 
  }
-
- #endregion
 ```    
-|
-
-
 ![image](https://github.com/user-attachments/assets/f1f9cb2e-7f34-46d1-809c-15bffb364eeb)
 
