@@ -378,7 +378,8 @@ preview = filterByMissingValue.Preview();
 
 |Manual|AutoML|
 |-|-|
-|```csharp
+|
+```csharp
 var mlContext = new MLContext();
 
 var dataView = mlContext.Data.LoadFromTextFile<TrainDelayInputModel>("flight_delay_train.csv", hasHeader: true, separatorChar: ',');
@@ -449,8 +450,9 @@ Console.WriteLine($"Prediction: {prediction.WillDelayBy15Minutes} | Score: {pred
       [LoadColumn(6)]
       public bool IsDelayBy15Minutes { get; set; }
   }
-```|
-   
+```
+|
+ ```csharp  
   var mlContext = new MLContext();
   var data =      return mlContext.Data.LoadFromTextFile<ModelInput>("flight_delay_train.csv", ',', hasHeader:true, allowQuoting: false);
 
@@ -462,7 +464,7 @@ Console.WriteLine($"Prediction: {prediction.WillDelayBy15Minutes} | Score: {pred
                           .Append(mlContext.Transforms.Conversion.MapKeyToValue(outputColumnName:@"PredictedLabel",inputColumnName:@"PredictedLabel"));
 
   var model = pipeline.Fit(trainData);
-    
+```    
 |
 
 
