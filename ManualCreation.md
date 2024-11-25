@@ -371,11 +371,14 @@ var filterByMissingValue = mlContext.Data.FilterRowsByMissingValues(dataView, na
 preview = filterByMissingValue.Preview();
 ```
 
-### Binary Classification - Logistic regression example
+### Data (Binary) Classification - Logistic regression example
 * Supervised Learning - Fradulent detection, Medical Diagonsis, Spam Detection - 2 possible values -  True/False or 1/0 values
 * BC Algorithms - Naive Bayes, Bayesian Classification, Decision Tree, Support Vector Machines, Neural Networks,..
 * BC Popular Trainers - AveragedPerceptron, SdcaNonCalibrated, LbfgsLogisticRegression, SgdNonCalibrated, SdcaLogisticRegression, FastTree, LinearSvm, FastTree, Prior, Gam
-```csharp
+
+|Manual|AutoML|
+|-|-|
+|```csharp
 var mlContext = new MLContext();
 
 var dataView = mlContext.Data.LoadFromTextFile<TrainDelayInputModel>("flight_delay_train.csv", hasHeader: true, separatorChar: ',');
@@ -415,6 +418,53 @@ input = new TrainDelayInputModel { Origin = "MSP", Destination = "SEA", Departur
 prediction = predictionEngine.Predict(input);
 
 Console.WriteLine($"Prediction: {prediction.WillDelayBy15Minutes} | Score: {prediction.Score}");
-```
+
+  class TrainDelayResultModel
+  {
+      [ColumnName("PredictedLabel")]
+      public bool WillDelayBy15Minutes { get; set; }
+
+      public float Score { get; set; }
+  }
+  class TrainDelayInputModel
+  {
+      [LoadColumn(0)]
+      public string Origin { get; set; }
+
+      [LoadColumn(1)]
+      public string Destination { get; set; }
+
+      [LoadColumn(2)]
+      public float DepartureTime { get; set; }
+
+      [LoadColumn(3)]
+      public float ExpectedArrivalTime { get; set; }
+
+      [LoadColumn(4)]
+      public float OriginalArrivalTime { get; set; }
+
+      [LoadColumn(5)]
+      public int DelayMinutes { get; set; }
+
+      [LoadColumn(6)]
+      public bool IsDelayBy15Minutes { get; set; }
+  }
+```|
+   
+  var mlContext = new MLContext();
+  var data =      return mlContext.Data.LoadFromTextFile<ModelInput>("flight_delay_train.csv", ',', hasHeader:true, allowQuoting: false);
+
+  var pipeline = mlContext.Transforms.Categorical.OneHotEncoding(new []{new InputOutputColumnPair(@"ORIGIN", @"ORIGIN"),new InputOutputColumnPair(@"DESTINATION", @"DESTINATION")}, outputKind: OneHotEncodingEstimator.OutputKind.Indicator)      
+                          .Append(mlContext.Transforms.ReplaceMissingValues(new []{new InputOutputColumnPair(@"DEPARTURE_TIME", @"DEPARTURE_TIME"),new InputOutputColumnPair(@"EXPECTED_ARRIVAL_TIME", @"EXPECTED_ARRIVAL_TIME")}))      
+                          .Append(mlContext.Transforms.Concatenate(@"Features", new []{@"ORIGIN",@"DESTINATION",@"DEPARTURE_TIME",@"EXPECTED_ARRIVAL_TIME"}))      
+                          .Append(mlContext.Transforms.Conversion.MapValueToKey(outputColumnName:@"IS_DELAY_BY_15_MINUTES",inputColumnName:@"IS_DELAY_BY_15_MINUTES",addKeyValueAnnotationsAsText:false))      
+                          .Append(mlContext.MulticlassClassification.Trainers.OneVersusAll(binaryEstimator:mlContext.BinaryClassification.Trainers.FastTree(new FastTreeBinaryTrainer.Options(){NumberOfLeaves=4,MinimumExampleCountPerLeaf=20,NumberOfTrees=4,MaximumBinCountPerFeature=254,FeatureFraction=1,LearningRate=0.1,LabelColumnName=@"IS_DELAY_BY_15_MINUTES",FeatureColumnName=@"Features",DiskTranspose=false}),labelColumnName: @"IS_DELAY_BY_15_MINUTES"))      
+                          .Append(mlContext.Transforms.Conversion.MapKeyToValue(outputColumnName:@"PredictedLabel",inputColumnName:@"PredictedLabel"));
+
+  var model = pipeline.Fit(trainData);
+    
+|
+
+
 ![image](https://github.com/user-attachments/assets/f1f9cb2e-7f34-46d1-809c-15bffb364eeb)
 
