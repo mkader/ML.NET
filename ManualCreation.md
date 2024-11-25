@@ -371,3 +371,50 @@ var filterByMissingValue = mlContext.Data.FilterRowsByMissingValues(dataView, na
 preview = filterByMissingValue.Preview();
 ```
 
+### Binary Classification - Logistic regression example
+* Supervised Learning - Fradulent detection, Medical Diagonsis, Spam Detection - 2 possible values -  True/False or 1/0 values
+* BC Algorithms - Naive Bayes, Bayesian Classification, Decision Tree, Support Vector Machines, Neural Networks,..
+* BC Popular Trainers - AveragedPerceptron, SdcaNonCalibrated, LbfgsLogisticRegression, SgdNonCalibrated, SdcaLogisticRegression, FastTree, LinearSvm, FastTree, Prior, Gam
+```csharp
+var mlContext = new MLContext();
+
+var dataView = mlContext.Data.LoadFromTextFile<TrainDelayInputModel>("flight_delay_train.csv", hasHeader: true, separatorChar: ',');
+
+//used only needed columns in SelectColumns function - not included ORIGINAL_ARRIVAL_TIME,DELAY_MINUTES
+var pipeline = mlContext.Transforms.SelectColumns(nameof(TrainDelayInputModel.Origin), nameof(TrainDelayInputModel.Destination),
+                    nameof(TrainDelayInputModel.DepartureTime), nameof(TrainDelayInputModel.ExpectedArrivalTime),
+                    nameof(TrainDelayInputModel.IsDelayBy15Minutes))
+
+    //convert string to index, because ML.NET can't work with string
+    //OneHotEncoding - Converts the Origin column(e.g., "NYC", "LAX") value into a binary vector.
+    //Encoded_ORIGIN - The resulting encoded columns are stored under this new column name.
+                .Append(mlContext.Transforms.Categorical.OneHotEncoding("Encoded_ORIGIN", nameof(TrainDelayInputModel.Origin)))
+                .Append(mlContext.Transforms.Categorical.OneHotEncoding("Encoded_DESTINATION", nameof(TrainDelayInputModel.Destination)))
+
+    //now we have 7 columns, so we can delete 2 original columns    
+                .Append(mlContext.Transforms.DropColumns(nameof(TrainDelayInputModel.Origin), nameof(TrainDelayInputModel.Destination)))
+
+                .Append(mlContext.Transforms.Concatenate("Features", "Encoded_ORIGIN", "Encoded_DESTINATION", nameof(TrainDelayInputModel.DepartureTime),
+                                                            nameof(TrainDelayInputModel.ExpectedArrivalTime)))
+
+                .Append(mlContext.Transforms.Conversion.ConvertType("Label", nameof(TrainDelayInputModel.IsDelayBy15Minutes), DataKind.Boolean))
+
+                .Append(mlContext.BinaryClassification.Trainers.SdcaLogisticRegression());
+
+var model = pipeline.Fit(dataView);
+var preview = model.Transform(dataView).Preview();
+
+var predictionEngine = mlContext.Model.CreatePredictionEngine<TrainDelayInputModel, TrainDelayResultModel>(model);
+
+var input = new TrainDelayInputModel { Origin = "JFK", Destination = "ATL", DepartureTime = 1930, ExpectedArrivalTime = 2225 };
+var prediction = predictionEngine.Predict(input);
+
+Console.WriteLine($"Prediction: {prediction.WillDelayBy15Minutes} | Score: {prediction.Score}");
+
+input = new TrainDelayInputModel { Origin = "MSP", Destination = "SEA", DepartureTime = 1745, ExpectedArrivalTime = 1930 };
+prediction = predictionEngine.Predict(input);
+
+Console.WriteLine($"Prediction: {prediction.WillDelayBy15Minutes} | Score: {prediction.Score}");
+```
+![image](https://github.com/user-attachments/assets/f1f9cb2e-7f34-46d1-809c-15bffb364eeb)
+
