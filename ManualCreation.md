@@ -378,7 +378,8 @@ preview = filterByMissingValue.Preview();
 
 |Manual|AutoML|
 |-|-|
-|
+|test|tes1|
+
 ```csharp
 var mlContext = new MLContext();
 
