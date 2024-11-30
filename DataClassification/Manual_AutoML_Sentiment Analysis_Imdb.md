@@ -100,3 +100,5 @@ public class ModelOutput
     public float[] Score { get; set; }
 }
 ```
+![image](https://github.com/user-attachments/assets/0eb6c09b-c2c2-4de9-a55c-17c667c9df7f)
+
