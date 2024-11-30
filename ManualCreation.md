@@ -370,3 +370,5 @@ preview = filterByValue.Preview();
 var filterByMissingValue = mlContext.Data.FilterRowsByMissingValues(dataView, nameof(InputModel.Salary));
 preview = filterByMissingValue.Preview();
 ```
+
+<a href="https://github.com/mkader/ML.NET/blob/main/DataClassification/Manual_AutoML_flight_delay.md">Data (Binary) Classification - Logistic regression example</a>
